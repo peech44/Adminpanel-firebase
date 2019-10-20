@@ -2,9 +2,15 @@ P1
 <<<<<<< HEAD
 
 git init 
+
+git pull
+
 git add [README.md]
+
 git commit -m "[topic of commit]"
+
 git remote add origin https://github.com/peech44/Adminpanel-firebase.git
+
 git push -u origin master
 
 =======
