@@ -3,6 +3,8 @@ P1
 
 For admin section
 
+WArniNG before DepLoy tO firEbAsE change login with persistant session
+
 
 
 
