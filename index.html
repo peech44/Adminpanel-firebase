@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Admin Panel</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+
+<!-- commend wrong src
+    <script src="login.js"></script>
+    
+    
+    <script type="text/javascript" src="login.js"></script>
+    -->
+ 
+</head>
+
+<body onload = "start()" >
+
+<!-- login modal sign in popup -->
+
+    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <i class="fas fa-envelope prefix grey-text"></i>
+          <input type="email" id="email_field" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="defaultForm-email">Your email</label>
+
+          <p>
+          <button type="submit" class="btn btn-success" id="ModalbtnSendresetpass" onclick= "resetpass()">send email reset password</button>
+          </p>
+
+        </div>
+
+        <div class="md-form mb-4">
+          <i class="fas fa-lock prefix grey-text"></i>
+          <input type="password" id="password_field" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-success btn-lg float-right" id="ModalbtnSingIn" onclick= "login()">Sign In</button>
+
+
+      </div>
+
+      
+
+     
+
+
+    </div>
+  </div>
+</div>
+
+
+
+<!--    end of modal sign in popup     -->
+
+
+<!-- sign up modal popup  -->
+
+<div class="modal fade" id="modalSignUpForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Sign Up</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <i class="fas fa-envelope prefix grey-text"></i>
+          <input type="email" id="SignUpemail_field" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="defaultForm-email">Your email</label>
+        </div>
+
+        <div class="md-form mb-4">
+          <i class="fas fa-lock prefix grey-text"></i>
+          <input type="password" id="SignUppassword_field" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-success btn-lg float-right" id="ModalbtnSingUp" onclick= "signUp()">Sign Up</button>
+
+
+      </div>
+
+     
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+    
+
+<!--  end of sign up modal popup  -->
+
+
+<!-- reauthenticate dalete modal popup  -->
+
+
+<div class="modal fade" id="modalReauthenDeleteForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold"> Re-authentication </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <i class="fas fa-envelope prefix grey-text"></i>
+          <input type="email" id="ReauthenDeleteemail_field" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="defaultForm-email">Your email</label>
+        </div>
+
+        <div class="md-form mb-4">
+          <i class="fas fa-lock prefix grey-text"></i>
+          <input type="password" id="ReauthenDeletepassword_field" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-success btn-lg float-right" id="ModalbtnReauthenDelete" onclick= "reauthenticateDelete()">Delete user</button>
+
+
+      </div>
+
+     
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- end of reauthenticate dalete modal popup  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="nav-body border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading nav-head">
+                <div class="row">
+                    <div  class="col-12 d-flex justify-content-center">
+                        <img class="rounded-circle avatar-image" src="img/user.png">
+                    </div>
+                    <div id=""class="col-12 d-flex justify-content-center">
+                        <div id="user_div" class="loggedin-div">
+                            <p id="user_para"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 pt-3 font-weight-bold nav-font">
+                    หลักสูตร 
+                </div>
+            </div>
+            <div class="list-group list-group-flush mt-3 mb-2 nav-body">
+                <a href="index.html" class="list-group-item list-group-item-action nav-body nav-font">วิศวกรรมระบบสารสนเทศและเครือข่าย</a>
+                <a href="ME.html" class="list-group-item list-group-item-action nav-body nav-font">วิศวกรรมเครื่องกล</a>
+                <a href="MI.html" class="list-group-item list-group-item-action nav-body nav-font">วิศวกรรมเหมืองแร่</a>
+                <a href="EE.html" class="list-group-item list-group-item-action nav-body nav-font">วิศวกรรมไฟฟ้า</a>
+                <a href="CPE.html" class="list-group-item list-group-item-action nav-body nav-font">วิศวกรรมคอมพิวเตอร์</a>
+                <a href="ENVI.html" class="list-group-item list-group-item-action nav-body nav-font">วิศวกรรมสิ่งแวดล้อม</a>
+                <a href="IE.html" class="list-group-item list-group-item-action nav-body nav-font">วิศวกรรมอุตสหการ</a>
+                <a href="CE.html" class="list-group-item list-group-item-action nav-body nav-font">วิศวกรรมโยธา</a>
+            </div>
+            <div class="row">
+                <div class="col-12 pb-3 pt-3 font-weight-bold nav-font">
+                    ปรับปรุงหลักสูตร
+                </div>
+            </div>
+            <div class="row border-top border-bottom">
+                <div class="col-12 py-3">
+                    <button id = "DownbtnLogout" class="btn btn-danger" onclick="logout1()"><i class="fas fa-sign-out-alt"> ออกจากระบบ</i></button>
+                </div>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+            <nav class="navbar navbar-expand-lg navbar-light nav-head border-bottom">
+                <button class="navbar-toggler" type="button" id="menu-toggle"><span class="navbar-toggler-icon"></span></button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                        <!-- login buton -->
+                        <button id="BarbtnLogin"  class="btn btn-primary" data-toggle="modal" data-target="#modalLoginForm">
+                        Sign-In
+                        </button>
+
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <button id ="navbarName" class="btn btn-secondary">
+                                        Admin
+                                    </button>
+              </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" >
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#modalSignUpForm">
+                                        Add New Admin
+                                    </button> </a>
+                                <a class="dropdown-item" > 
+                                    <button class="btn btn-secondary" 
+                                    onclick="resetpass()">
+                                        Reset Password
+                                    </button> </a>
+
+                                <a class="dropdown-item" > 
+                                    <button class="btn btn-warning"
+                                    data-toggle="modal" data-target="#modalReauthenDeleteForm" 
+                                    onclick="">
+                                        Delete this user
+                                    </button> </a>
+
+
+
+                                <div class="dropdown-divider"></div>
+
+                                <a class="dropdown-item" >
+                                    <button class="btn btn-danger" onclick="logout1()">Sign-out</button></a>
+                                
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 mt-4">
+                        <h4>
+                <i class="fas fa-book"></i> หลักสูตรวิศวกรรมระบบสารสนเทศและเครือข่าย
+            </h4>
+                    </div>
+                    <div class="col-12 offset-1 mt-2">
+                        <h5>
+                  
+                  General Education &nbsp;&nbsp;&nbsp;&nbsp;
+
+                  <button class= "btn btn-info" id="btnShowaddcourse" onclick="showAddCourse()"> Add course </button>
+              </h5>
+                    </div>
+
+
+                    <!-- start add C form -->
+
+
+
+
+                  <div class="col-12 offset-1 mt-2">
+
+                    <form id = "addCourseForm" class="border">
+
+                      <div class="form-row">
+
+                        <div class="form-group col-md-2">
+                        <label for="exampleInputEmail1">รหัสวิชา&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input id="addCcode" type="text" class="form-control" placeholder="กรอกรหัสวิชา">
+                      
+                        </div>
+                    
+                        <div class="form-group col-md-2">
+                        <label for="exampleInputPassword1">&nbsp;&nbsp;&nbsp;&nbsp;ชื่อวิชา&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input id="addCname"type="text" class="form-control"  placeholder="ชื่อวิชา">
+
+                        </div>
+
+                        <div class="form-group col-md-2">
+                        <label for="exampleInputPassword1">&nbsp;&nbsp;&nbsp;&nbsp;หน่วยกิต&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input id="addCcredit"type="number" class="form-control"  placeholder="ชื่อวิชา">
+
+                        </div>
+                    
+                      </div>
+
+
+                      <div class="form-row">
+                    
+                    
+                    
+
+                        <div class="form-group col-md-6">
+                        <label for="exampleInputPassword1">วิชาที่ต้องผ่านก่อน&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input id="addCprerequisite"type="text" class="form-control"  placeholder="กรอกรหัสวิชา,กรอกรหัสวิชา,กรอกรหัสวิชา,กรอกรหัสวิชา">&nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>
+
+                        <div class="form-group col-md-3 justify-content-center">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+
+                        <button type = "button" class="btn btn-primary btn-lg " onclick="addCourse()">submit</button>
+
+                        </div>
+
+                      
+
+                      </div>
+
+                    
+                    </form>
+
+                  </div>
+
+                  <!-- end add C form -->
+
+
+
+
+
+
+
+
+                    <div class="col-10 offset-1 mt-2">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">รหัสวิชา</th>
+                                    <th scope="col">ชื่อวิชา</th>
+                                    <th scope="col">เครดิต</th>
+                                    <th scope="col">วิชาที่ต้องผ่านก่อน</th>
+                                    <th scope="col">ลบวิชา</th>
+                                </tr>
+                            </thead>
+                            <tbody id ="Ccode">
+
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12 offset-1 mt-2">
+                        <h5>
+                  Major Education  &nbsp;&nbsp;&nbsp;&nbsp;
+
+                  <button class= "btn btn-info" id="btnShowaddMcourse" onclick="showAddMCourse()"> Add course </button>
+              </h5>
+                    </div>
+
+                    <!-- start add MC form -->
+
+
+                    <div class="col-12 offset-1 mt-2">
+
+                      <form id = "addMCourseForm" class="border">
+
+                      <div class="form-row">
+
+                        <div class="form-group col-md-2">
+                        <label for="exampleInputEmail1">รหัสวิชา&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input id="addMCcode" type="text" class="form-control" placeholder="กรอกรหัสวิชา">
+                      
+                        </div>
+                    
+                        <div class="form-group col-md-2">
+                        <label for="exampleInputPassword1">&nbsp;&nbsp;&nbsp;&nbsp;ชื่อวิชา&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input id="addMCname"type="text" class="form-control"  placeholder="ชื่อวิชา">
+
+                        </div>
+
+                      <div class="form-group col-md-2">
+                      <label for="exampleInputPassword1">&nbsp;&nbsp;&nbsp;&nbsp;หน่วยกิต&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                      <input id="addMCcredit"type="number" class="form-control"  placeholder="ชื่อวิชา">
+
+                      </div>
+                    
+                    </div>
+
+
+                    <div class="form-row">
+                    
+                    
+                    
+
+                      <div class="form-group col-md-6">
+                      <label for="exampleInputPassword1">วิชาที่ต้องผ่านก่อน&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                      <input id="addMCprerequisite"type="text" class="form-control"  placeholder="กรอกรหัสวิชา,กรอกรหัสวิชา,กรอกรหัสวิชา,กรอกรหัสวิชา">&nbsp;&nbsp;&nbsp;&nbsp;
+                      </div>
+
+                      <div class="form-group col-md-3 justify-content-center">
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+
+                      <button type = "button" class="btn btn-primary btn-lg " onclick="addMCourse()">submit</button>
+
+                      </div>
+
+                      
+
+                    </div>
+
+                    
+                    </form>
+
+                  </div>
+
+
+                  <!-- end add MC form -->
+
+
+
+
+
+
+
+
+
+
+                    <div class="col-10 offset-1 mt-2">
+                        <table class="table table-borderless" id="Major">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">รหัสวิชา</th>
+                                    <th scope="col">ชื่อวิชา</th>
+                                    <th scope="col">เครดิต</th>
+                                    <th scope="col">วิชาที่ต้องผ่านก่อน</th>
+                                    <th scope="col">ลบวิชา</th>
+                                </tr>
+                            </thead>
+                            <tbody id ="MCcode">
+
+                                
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    <div id="user_div" class="loggedin-div">
+        <p id="user_para"></p>
+    </div>
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
+    <!-- Menu Toggle Script -->
+    <script>
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.6.2/firebase-app.js"></script>
+
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-database.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-auth.js"></script>    
+
+<script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-firestore.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCNSoQ2BfBIOuE8D7JqxLyjYkR-Cpcx6KA",
+    authDomain: "project1-e118d.firebaseapp.com",
+    databaseURL: "https://project1-e118d.firebaseio.com",
+    projectId: "project1-e118d",
+    storageBucket: "project1-e118d.appspot.com",
+    messagingSenderId: "747682211515",
+    appId: "1:747682211515:web:bc94268cdf42e73b166b9e"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  var secondaryApp = firebase.initializeApp(firebaseConfig, "Secondary");
+
+
+</script>
+
+<script type="text/javascript" src="index.js"></script>
+
+  
+
+
+</body>
+
+</html>
