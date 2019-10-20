@@ -1,4 +1,7 @@
 P1
+
+GGGGGGGGGGGGGG
+
 <<<<<<< HEAD
 
 git init 
