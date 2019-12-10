@@ -175,9 +175,67 @@
 
 
 
+<!-- add new curriculum modal popup  -->
+
+<div class="modal fade " id="modalAddCurrForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold"> Add new curriculum </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <label data-error="wrong" data-success="right" for="defaultForm-email">Curriculum ISNE year (such as ISNE55)</label>
+          
+          <input type="text" id="AddCurrNameId_field" class="form-control validate" placeholder="ISNE55">
+          
+        </div>
+
+        <div class="md-form mb-4">
+           <label data-error="wrong" data-success="right" for="defaultForm-pass">Curriculum name (such as หลักสูตรวิชาวิศวกรรมระบบสารสนเทศและเครือข่าย ปี55)</label>
+          <input type="text" id="AddCurrName_field" class="form-control validate" placeholder="หลักสูตรวิชาวิศวกรรมระบบสารสนเทศและเครือข่าย ปี55">
+
+         
+        </div>
+
+        <div class="md-form mb-4">
+           <label data-error="wrong" data-success="right" for="defaultForm-pass">Minimum credits (input number of minimum credits)</label>
+          <input type="number" id="AddCurrMinCredit_field" class="form-control validate" placeholder="หน่วยกิตขั้นต่ำ">
+         
+        </div>
+
+        <div class="md-form mb-4">
+           <label data-error="wrong" data-success="right" for="defaultForm-pass">Curriculum id (input curriculum id with 4 number such as 0001 or 0002)</label>
+           <label data-error="wrong" data-success="right" for="defaultForm-pass">For example : if previous curriculum id is 0001 so, input this to 0002</label>
+          <input type="text" id="AddCurrId_field" class="form-control validate" placeholder="0002">
+         
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-success btn-lg float-right" id="modalBtnAddnewCurr" onclick= "addNewCurriculum()">Add new curriculum</button>
+
+
+      </div>
+
+     
+
+
+    </div>
+  </div>
+</div>
 
 
 
+
+
+
+
+<!-- end of add new curriculum modal popup   -->
 
 
 
@@ -220,12 +278,14 @@
             </div>
             <div class="row">
                 <div class="col-12 pb-3 pt-3 font-weight-bold nav-font">
-                    ปรับปรุงหลักสูตร
+                    <button id = "DownbtnAddnewCurr" class="btn btn-info btn-block" data-toggle="modal" data-target="#modalAddCurrForm">
+                     เพิ่มหลักสูตร
+                    </button>
                 </div>
             </div>
             <div class="row border-top border-bottom">
                 <div class="col-12 py-3">
-                    <button id = "DownbtnLogout" class="btn btn-danger" onclick="logout1()"><i class="fas fa-sign-out-alt"> ออกจากระบบ</i></button>
+                    <button id = "DownbtnLogout" class="btn btn-danger btn-block" onclick="logout1()"><i class="fas fa-sign-out-alt"> ออกจากระบบ</i></button>
                 </div>
             </div>
         </div>
@@ -284,15 +344,55 @@
 
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-12 mt-4">
+                    <div class="col-10 offset-1 mt-2">
                         <h4>
-                <i class="fas fa-book"></i> หลักสูตรวิศวกรรมระบบสารสนเทศและเครือข่าย
-            </h4>
+                          <button id="btnChooseCurr" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        Choose curriculum year
+                        </button>
+                        <div class="dropdown-menu" id = "currName">
+                              
+                              
+                              
+                        </div>
+                        <p></p>
+
+
+
+                <i class="fas fa-book"></i> <b id ="headCurrName"></b>
+                <p></p>
+                </h4>
+                <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    
+                                    <th scope="col">ISNE YEAR</th>
+                                    <th scope="col">Curriculum ID</th>
+                                    <th scope="col">Minimum Credits</th>
+                                    
+                                </tr>
+                                <tbody id ="Info">
+
+                                
+                            </tbody>
+                            </thead>
+                            <tbody id ="">
+
+                                
+                            </tbody>
+                </table>
+
+
+                        
+                        
+
+                      
+
+
                     </div>
                     <div class="col-12 offset-1 mt-2">
                         <h5>
                   
-                  General Education &nbsp;&nbsp;&nbsp;&nbsp;
+                  Core Courses and Language Communication Courses &nbsp;&nbsp;&nbsp;&nbsp;
 
                   <button class= "btn btn-info" id="btnShowaddcourse" onclick="showAddCourse()"> Add course </button>
               </h5>
@@ -311,24 +411,55 @@
                       <div class="form-row">
 
                         <div class="form-group col-md-2">
+                        <h5><b>
                         <label for="exampleInputEmail1">รหัสวิชา&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        </h5></b>
                         <input id="addCcode" type="text" class="form-control" placeholder="กรอกรหัสวิชา">
                       
                         </div>
                     
                         <div class="form-group col-md-2">
+                        <h5><b>
                         <label for="exampleInputPassword1">&nbsp;&nbsp;&nbsp;&nbsp;ชื่อวิชา&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        </h5></b>
                         <input id="addCname"type="text" class="form-control"  placeholder="ชื่อวิชา">
 
                         </div>
 
                         <div class="form-group col-md-2">
+                        <h5><b>
                         <label for="exampleInputPassword1">&nbsp;&nbsp;&nbsp;&nbsp;หน่วยกิต&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <input id="addCcredit"type="number" class="form-control"  placeholder="ชื่อวิชา">
+                        </h5></b>
+                        <input id="addCcredit"type="number" class="form-control"  placeholder="หน่วยกิต">
 
                         </div>
                     
                       </div>
+
+                      <div class="form-row">
+
+                        <div class="form-group col-md-3">
+                        <h5><b>
+                        <label for="exampleInputEmail1">Year&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        </h5></b>
+                        <input id="addCyear" type="number" class="form-control" placeholder="กรอกปีที่ต้องเรียน">
+                      
+                        </div>
+
+                        <div class="form-group col-md-3">
+                        <h5><b>
+                        <label for="exampleInputEmail1">Semester&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        </h5></b>
+                        <input id="addCsemester" type="number" class="form-control" placeholder="กรอกเทอมที่ต้องเรียน">
+                      
+                        </div>
+
+
+
+
+                      </div>
+
+
 
 
                       <div class="form-row">
@@ -337,7 +468,10 @@
                     
 
                         <div class="form-group col-md-6">
+                        <h5><b>
                         <label for="exampleInputPassword1">วิชาที่ต้องผ่านก่อน&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        </h5></b>
+                        <label for="exampleInputEmail1">&nbsp;&nbsp;(กรอกเป็นตัวเลขรหัสวิชา 6 หลัก)&nbsp;&nbsp;</label>
                         <input id="addCprerequisite"type="text" class="form-control"  placeholder="กรอกรหัสวิชา,กรอกรหัสวิชา,กรอกรหัสวิชา,กรอกรหัสวิชา">&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
 
@@ -375,6 +509,8 @@
                                     <th scope="col">ชื่อวิชา</th>
                                     <th scope="col">เครดิต</th>
                                     <th scope="col">วิชาที่ต้องผ่านก่อน</th>
+                                    <th scope="col">ปี</th>
+                                    <th scope="col">เทอม</th>
                                     <th scope="col">ลบวิชา</th>
                                 </tr>
                             </thead>
@@ -386,7 +522,7 @@
                     </div>
                     <div class="col-12 offset-1 mt-2">
                         <h5>
-                  Major Education  &nbsp;&nbsp;&nbsp;&nbsp;
+                  Major Courses and Major Electives Courses  &nbsp;&nbsp;&nbsp;&nbsp;
 
                   <button class= "btn btn-info" id="btnShowaddMcourse" onclick="showAddMCourse()"> Add course </button>
               </h5>
@@ -402,24 +538,57 @@
                       <div class="form-row">
 
                         <div class="form-group col-md-2">
+                        <h5><b>
                         <label for="exampleInputEmail1">รหัสวิชา&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        </h5></b>
                         <input id="addMCcode" type="text" class="form-control" placeholder="กรอกรหัสวิชา">
                       
                         </div>
                     
                         <div class="form-group col-md-2">
+                        <h5><b>
                         <label for="exampleInputPassword1">&nbsp;&nbsp;&nbsp;&nbsp;ชื่อวิชา&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        </h5></b>
                         <input id="addMCname"type="text" class="form-control"  placeholder="ชื่อวิชา">
 
                         </div>
 
                       <div class="form-group col-md-2">
+                      <h5><b>
                       <label for="exampleInputPassword1">&nbsp;&nbsp;&nbsp;&nbsp;หน่วยกิต&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                      <input id="addMCcredit"type="number" class="form-control"  placeholder="ชื่อวิชา">
+                      </h5></b>
+                      <input id="addMCcredit"type="number" class="form-control"  placeholder="หน่วยกิต">
 
                       </div>
                     
                     </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group col-md-3">
+                        <h5><b>
+                        <label for="exampleInputEmail1">Year&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        </h5></b>
+                        <p></p>
+                        <label for="exampleInputEmail1">(Major Electives กรอกเลข 0)&nbsp;&nbsp;</label>
+                        <input id="addMCyear" type="number" class="form-control" placeholder="กรอกปีที่ต้องเรียน">
+                      
+                        </div>
+
+                        <div class="form-group col-md-3">
+                        <h5><b>
+                        <label for="exampleInputEmail1">Semester&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        </h5></b>
+                        <p></p>
+                        <label for="exampleInputEmail1">(Major Electives กรอกเลข 0)&nbsp;&nbsp;</label>
+                        <input id="addMCsemester" type="number" class="form-control" placeholder="กรอกเทอมที่ต้องเรียน">
+                      
+                        </div>
+
+
+
+
+                      </div>
 
 
                     <div class="form-row">
@@ -428,7 +597,10 @@
                     
 
                       <div class="form-group col-md-6">
+                      <h5><b>
                       <label for="exampleInputPassword1">วิชาที่ต้องผ่านก่อน&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                      </h5></b>
+                      <label for="exampleInputEmail1">&nbsp;&nbsp;(กรอกเป็นตัวเลขรหัสวิชา 6 หลัก)&nbsp;&nbsp;</label>
                       <input id="addMCprerequisite"type="text" class="form-control"  placeholder="กรอกรหัสวิชา,กรอกรหัสวิชา,กรอกรหัสวิชา,กรอกรหัสวิชา">&nbsp;&nbsp;&nbsp;&nbsp;
                       </div>
 
@@ -469,6 +641,8 @@
                                     <th scope="col">ชื่อวิชา</th>
                                     <th scope="col">เครดิต</th>
                                     <th scope="col">วิชาที่ต้องผ่านก่อน</th>
+                                    <th scope="col">ปี</th>
+                                    <th scope="col">เทอม</th>
                                     <th scope="col">ลบวิชา</th>
                                 </tr>
                             </thead>

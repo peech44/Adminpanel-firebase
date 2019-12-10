@@ -1,4 +1,7 @@
+//index js 
+// Copy Right@11-19-2019 by peech B14 neverdie
 
+var currNameIdGlobal;
 
 
 window.onload=function(){
@@ -25,11 +28,24 @@ function initWeb(){
     document.getElementById("BarbtnLogin").disabled = true;
     document.getElementById("navbarDropdown").disabled = false;
     document.getElementById("DownbtnLogout").disabled = false;
+    document.getElementById("DownbtnAddnewCurr").disabled = false;
     //document.getElementById("BarbtnLogin").onclick = logout;
-    document.getElementById("btnShowaddcourse").style.visibility = "visible";
+    //button addCourse and addMcourse show when user click curriculumID
+    //move show in start function
+    /*document.getElementById("btnShowaddcourse").style.visibility = "visible";
+    document.getElementById("addCourseForm").style.display = "none";
     document.getElementById("btnShowaddMcourse").style.visibility = "visible";
+    document.getElementById("addMCourseForm").style.display = "none";*/
 
-    start(); 
+    document.getElementById("btnShowaddcourse").style.visibility = "hidden";
+    document.getElementById("addCourseForm").style.display = "none";
+    document.getElementById("btnShowaddMcourse").style.visibility = "hidden";
+    document.getElementById("addMCourseForm").style.display = "none";
+
+    getCurrId();
+
+    
+    //temp1();
 
   }
 
@@ -57,8 +73,13 @@ function initWeb(){
     document.getElementById("BarbtnLogin").disabled = false;
     document.getElementById("navbarDropdown").disabled = true;
     document.getElementById("DownbtnLogout").disabled = true;
+    document.getElementById("DownbtnAddnewCurr").disabled = true;
     //document.getElementById("ModalbtnSingUp").style.visibility = "hidden";
+    //document.getElementById("btnChooseCurr").style.display = "disabled";
     console.log("No user go to login");
+
+    
+    
 
   }
   });
@@ -99,7 +120,7 @@ function login(){
 
   else{
 
-    firebase.auth().signInWithEmailAndPassword(Inputemail, Inputpass)
+    /*firebase.auth().signInWithEmailAndPassword(Inputemail, Inputpass)
     .catch(function(error) {
   // Handle Errors here.
       var errorCode = error.code;
@@ -115,7 +136,7 @@ function login(){
       console.log(error);
     }
     
-    );
+    );*/
     
 
     //persistant support only web firebase cann't work in local
@@ -123,7 +144,7 @@ function login(){
 
 
 
-    /*firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
     .then(function() {
     // Existing and future Auth states are now persisted in the current
     // session only. Closing the window would clear any existing state even
@@ -155,7 +176,7 @@ function login(){
     // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
-    });*/
+    });
 
     
 
@@ -419,12 +440,18 @@ function reauthenticateDelete(){
 
  
 
-function start(){
+function start(currNameId){
 
-
+  $("#Ccode").empty();
+  $("#MCcode").empty();
   
-  GeneralEducation();
-  MajorEducation();
+  document.getElementById("btnShowaddcourse").style.visibility = "visible";
+  document.getElementById("addCourseForm").style.display = "none";
+  document.getElementById("btnShowaddMcourse").style.visibility = "visible";
+  document.getElementById("addMCourseForm").style.display = "none";
+  
+  GeneralEducation(currNameId);
+  MajorEducation(currNameId);
   
 
 
@@ -434,11 +461,11 @@ function start(){
 
 
 
-function GeneralEducation(){
+function GeneralEducation(currNameId){
 
   var fragment = document.createDocumentFragment();
   var table = document.createElement("table");
-  var query = firebase.database().ref("ISNE/Course/").orderByChild("Ccode");
+  var query = firebase.database().ref("ISNE/"+currNameId+"/Course/").orderByChild("Ccode");
   $(document).ready(function(){
   query.once("value").then(function(snapshot){
     var i = 1;  
@@ -448,10 +475,12 @@ function GeneralEducation(){
       var trValues = childSnapshot.val().Cname;
       var trCredit = childSnapshot.val().Ccredit;
       var trPrerequisite = childSnapshot.val().Cprerequisite;
+      var trYear = childSnapshot.val().Cyear;
+      var trSemester = childSnapshot.val().Csemester;
       //get key in db
       var trKey = childSnapshot.key;  
 
-       $("#Ccode").append('<tr><th scope="row" id = "numRow">'+i+'</th><td id = "trCode">'+trCode+'</td><td>'+trValues+'</td><td>'+trCredit+'</td><td>'+trPrerequisite+'</td><td><button id="btndel" name="Delete" onclick="CdeleteOnClick(\''+trKey+'\')"> <i class="fas fa-trash-alt"></i></button></td></tr>');
+       $("#Ccode").append('<tr><th scope="row" id = "numRow">'+i+'</th><td id = "trCode">'+trCode+'</td><td>'+trValues+'</td><td>'+trCredit+'</td><td>'+trPrerequisite+'</td><td>'+trYear+'</td><td>'+trSemester+'</td><td><button id="btndel" name="Delete" onclick="CdeleteOnClick(\''+trKey+'\', \''+currNameId+'\')"> <i class="fas fa-trash-alt"></i></button></td></tr>');
     //}
     console.log(i);
       i++;
@@ -466,35 +495,72 @@ function GeneralEducation(){
 
 }
 
-function CdeleteOnClick(trKey){
+function CdeleteOnClick(trKey,currNameId){
 
 
   console.log(trKey);
+
+
+  $(document).ready(function(){
+
+    var firebaseRef = firebase.database().ref("ISNE/"+currNameId+"/Course/"+trKey);
+
+    var confirm1 = confirm("Are you sure to delete ? ");
+
+       if(confirm1 == true){
+
+          firebaseRef.remove().then(function(){
+          console.log("Remove succeded");
+          //re display #Ccdoe
+          //if not the table of #Ccdoe will be duplicate (table1+table2)
+          $("#Ccode").empty();
+          //re display #Ccode
+          GeneralEducation(currNameId);
+
+          }).catch(function(error){
+
+              console.log("Remove failed: "+error.message);
+
+          })
+
+
+        }
+        else{
+
+
+        }
+
+
+  });
   
-  var firebaseRef = firebase.database().ref("ISNE/Course/"+trKey);
+
+  
+  
+  /*var firebaseRef = firebase.database().ref("ISNE/"+currNameId+"/Course/"+trKey);
   firebaseRef.remove().then(function(){
     console.log("Remove succeded");
     //re display #Ccdoe
     //if not the table of #Ccdoe will be duplicate (table1+table2)
     $("#Ccode").empty();
     //re display #Ccode
-    GeneralEducation();
+    GeneralEducation(currNameId);
 
   }).catch(function(error){
 
     console.log("Remove failed: "+error.message);
-  })
+  })*/
   
 
 }
 
 
-function MajorEducation(){
+function MajorEducation(currNameId){
 
 
-var fragment = document.createDocumentFragment();
+  var fragment = document.createDocumentFragment();
   var table = document.createElement("table");
-  var query = firebase.database().ref("ISNE/MajorCourse/").orderByChild("Ccode");
+  var query = firebase.database().ref("ISNE/"+currNameId+"/MajorCourse/").orderByChild("Ccode");
+
   $(document).ready(function(){
   query.once("value").then(function(snapshot){
     var i = 1;  
@@ -504,10 +570,12 @@ var fragment = document.createDocumentFragment();
       var trValues = childSnapshot.val().Cname;
       var trCredit = childSnapshot.val().Ccredit;
       var trPrerequisite = childSnapshot.val().Cprerequisite;
+      var trYear = childSnapshot.val().Cyear;
+      var trSemester = childSnapshot.val().Csemester;
       //get key in db
       var trKey = childSnapshot.key;  
 
-       $("#MCcode").append('<tr><th scope="row">'+i+'</th><td>'+trCode+'</td><td>'+trValues+'</td><td>'+trCredit+'</td><td>'+trPrerequisite+'</td><td><button id="btndel" name="Delete" onclick="MdeleteOnClick(\''+trKey+'\')"> <i class="fas fa-trash-alt"></i></button></td></tr>');
+       $("#MCcode").append('<tr><th scope="row">'+i+'</th><td>'+trCode+'</td><td>'+trValues+'</td><td>'+trCredit+'</td><td>'+trPrerequisite+'</td><td>'+trYear+'</td><td>'+trSemester+'</td><td><button id="btndel" name="Delete" onclick="MdeleteOnClick(\''+trKey+'\', \''+currNameId+'\')"> <i class="fas fa-trash-alt"></i></button></td></tr>');
     //}
     console.log(i);
 
@@ -525,26 +593,57 @@ var fragment = document.createDocumentFragment();
 }
 
 
-function MdeleteOnClick(trKey){
+function MdeleteOnClick(trKey, currNameId){
 
   console.log(trKey);
+
+  $(document).ready(function(){
+
+    var firebaseRef = firebase.database().ref("ISNE/"+currNameId+"/MajorCourse/"+trKey);
+
+    var confirm1 = confirm("Are you sure to delete ? ");
+
+       if(confirm1 == true){
+
+          firebaseRef.remove().then(function(){
+              console.log("Remove succeded");
+              //re display #MCcdoe
+              //if not the table of #Ccdoe will be duplicate (table1+table2)
+              $("#MCcode").empty();
+              //re display #MCcode
+              MajorEducation(currNameId);
+
+          }).catch(function(error){
+
+              console.log("Remove failed: "+error.message);
+          })
+
+
+      }
+      else{
+
+
+      }
+
+
+  });
+
+
   
-  var firebaseRef = firebase.database().ref("ISNE/MajorCourse/"+trKey);
+ /* var firebaseRef = firebase.database().ref("ISNE/"+currNameId+"/MajorCourse/"+trKey);
   firebaseRef.remove().then(function(){
     console.log("Remove succeded");
     //re display #MCcdoe
     //if not the table of #Ccdoe will be duplicate (table1+table2)
     $("#MCcode").empty();
     //re display #MCcode
-    MajorEducation();
+    MajorEducation(currNameId);
 
   }).catch(function(error){
 
     console.log("Remove failed: "+error.message);
-  })
+  })*/
   
-
-
 
 
 
@@ -555,6 +654,8 @@ function MdeleteOnClick(trKey){
 //add course section
 
 function showAddCourse(){
+
+  console.log("currNameIdGlobal :"+currNameIdGlobal);
 
   var addCourseForm = document.getElementById("addCourseForm");
   var btnShowaddcourse = document.getElementById("btnShowaddcourse");
@@ -574,10 +675,16 @@ function showAddCourse(){
 
 function addCourse(){
 
+  console.log("currNameIdGlobaladdCourse :"+currNameIdGlobal);
+
   var addCcode = document.getElementById("addCcode").value;
   var addCname = document.getElementById("addCname").value;
   var addCcredit = document.getElementById("addCcredit").value;
   var addCprerequisite = document.getElementById("addCprerequisite").value;
+
+  var addCyear = document.getElementById("addCyear").value;
+  var addCsemester = document.getElementById("addCsemester").value;
+
 
   var intCheck = 1;
   
@@ -612,8 +719,14 @@ function addCourse(){
     if(!addCprerequisite){
     addCprerequisite = "-";
     }
+    if(!addCyear || addCyear <= 0){
+      addCyear = "-";
+    }
+    if(!addCsemester || addCsemester <= 0){
+      addCsemester = "-";
+    }
 
-    var firebaseRef=firebase.database().ref("ISNE/Course/");
+    var firebaseRef=firebase.database().ref("ISNE/"+currNameIdGlobal+"/Course/");
 
     var newPostRef = firebaseRef.push({
 
@@ -621,7 +734,11 @@ function addCourse(){
       Ccode : addCcode,
       Cname : addCname,
       Ccredit : addCcredit,
-      Cprerequisite : addCprerequisite
+      Cprerequisite : addCprerequisite,
+
+      Cyear : addCyear,
+      Csemester : addCsemester
+
 
     }, function(error){
 
@@ -633,7 +750,17 @@ function addCourse(){
 
         $("#Ccode").empty();
         //re display #Ccode
-        GeneralEducation();
+        //
+        document.getElementById("addCcode").value='';
+        document.getElementById("addCname").value='';
+        document.getElementById("addCcredit").value='';
+        document.getElementById("addCprerequisite").value='';
+
+        document.getElementById("addCyear").value='';
+        document.getElementById("addCsemester").value='';
+
+
+        GeneralEducation(currNameIdGlobal);
 
       }
 
@@ -713,10 +840,15 @@ function showAddMCourse(){
 
 function addMCourse(){
 
+  console.log("currNameIdGlobaladdMCourse :"+currNameIdGlobal);
+
   var addMCcode = document.getElementById("addMCcode").value;
   var addMCname = document.getElementById("addMCname").value;
   var addMCcredit = document.getElementById("addMCcredit").value;
   var addMCprerequisite = document.getElementById("addMCprerequisite").value;
+
+  var addMCyear = document.getElementById("addMCyear").value;
+  var addMCsemester = document.getElementById("addMCsemester").value;
 
   var intCheck = 1;
   
@@ -748,12 +880,19 @@ function addMCourse(){
   if(intCheck == 1){
 
 
-    if(addMCprerequisite == " "){
+    if(!addMCprerequisite){
 
       addMCprerequisite = "-";
     }
+    if(!addMCyear || addMCyear <= 0){
+      addMCyear = "-";
+    }
+    if(!addMCsemester || addMCsemester <= 0){
 
-    var firebaseRef=firebase.database().ref("ISNE/MajorCourse/");
+      addMCsemester = "-";
+    }
+
+    var firebaseRef=firebase.database().ref("ISNE/"+currNameIdGlobal+"/MajorCourse/");
 
     var newPostRef = firebaseRef.push({
 
@@ -761,7 +900,10 @@ function addMCourse(){
       Ccode : addMCcode,
       Cname : addMCname,
       Ccredit : addMCcredit,
-      Cprerequisite : addMCprerequisite
+      Cprerequisite : addMCprerequisite,
+
+      Cyear : addMCyear,
+      Csemester : addMCsemester
 
     }, function(error){
 
@@ -773,7 +915,18 @@ function addMCourse(){
 
         $("#MCcode").empty();
         //re display #MCcode
-        MajorEducation();
+        //
+        
+        document.getElementById("addMCcode").value='';
+        document.getElementById("addMCname").value='';
+        document.getElementById("addMCcredit").value='';
+        document.getElementById("addMCprerequisite").value='';
+
+        document.getElementById("addMCyear").value='';
+        document.getElementById("addMCsemester").value='';
+
+
+        MajorEducation(currNameIdGlobal);
 
       }
 
@@ -796,6 +949,225 @@ function addMCourse(){
 }
 
 
+function addNewCurriculum(){
+
+  var AddCurrNameId = document.getElementById("AddCurrNameId_field").value;
+  var AddCurrName = document.getElementById("AddCurrName_field").value;
+  var AddCurrMinCredit = document.getElementById("AddCurrMinCredit_field").value;
+  var AddCurrId = document.getElementById("AddCurrId_field").value;
+
+  var intCheck = 1;
+  
+  //!check
+  //null
+  //undefined
+  //NaN
+  //empty string ("")
+  //0
+  //false
+
+  //check input
+  
+  if(!AddCurrNameId){
+    intCheck = 2;
+    alert("กรุณากรอก Curriculum ISNE year");
+  }
+  else if(!AddCurrName){
+    intCheck = 2;
+    alert("กรุณากรอก Curriculum name ");
+  }
+
+
+  else if(!AddCurrMinCredit || AddCurrMinCredit < 0){
+    intCheck = 2;
+    alert("เครดิตขั้นต่ำ ต้องมากกว่า 0 ");
+  }
+  else if(!AddCurrId || AddCurrId.length != 4){
+    intCheck = 2;
+    alert("Curriculum id จะต้องมี 4 ตัวเลข เช่น 0001,0002");
+
+
+  }
+
+  if(intCheck == 1){
+
+    
+
+    var firebaseRef=firebase.database().ref("ISNE/"+AddCurrNameId+"/Info/");
+
+    var newPostRef = firebaseRef.push({
+
+       Curriculumid : AddCurrId,
+       Minimumcredit : AddCurrMinCredit,
+       Name : AddCurrName
+
+
+
+
+    }, function(error){
+
+
+      if(error){
+        alert("Can't insert data.")
+      }
+      else{
+
+        alert("data was inserted successfully.")
+
+        //
+        
+        document.getElementById("AddCurrNameId_field").value='';
+        document.getElementById("AddCurrName_field").value='';
+        document.getElementById("AddCurrMinCredit_field").value='';
+        document.getElementById("AddCurrId_field").value='';
+
+        
+
+      }
+
+
+
+
+    });
+
+    var postId = newPostRef.key;
+
+    console.log(postId+" "+" completed");
+
+
+    
+
+  }
+
+
+
+
+
+}
+
+
+
+
+//$("#MCcode").append('<tr><th scope="row">'+i+'</th><td>'+trCode+'</td><td>'+trValues+'</td><td>'+trCredit+'</td><td>'+trPrerequisite+'</td><td><button id="btndel" name="Delete" onclick="MdeleteOnClick(\''+trKey+'\')"> <i class="fas fa-trash-alt"></i></button></td></tr>');
+
+
+
+
+
+function getCurrId(){
+
+  console.log("getCurrId");
+  var fragment = document.createDocumentFragment();
+
+  var query = firebase.database().ref("ISNE");
+
+  $(document).ready(function(){
+
+    query.orderByKey().once("value").then(function(snapshot){
+      var i = 1;  
+      snapshot.forEach(function(childSnapshot){
+
+        //TEST55, TEST60
+
+        var currNameId = childSnapshot.key;
+
+        
+
+
+        getCurrName(currNameId,i);
+        
+
+        console.log("getCurrId"+i);
+        i++;
+      });
+
+
+    });
+
+
+  });
+
+
+
+}
+
+function getCurrName(currNameId,i){
+
+   console.log("getCurrName");
+
+  
+
+  var query = firebase.database().ref("ISNE/"+currNameId+"/Info/");
+
+  $(document).ready(function(){
+
+    query.once("value").then(function(snapshot){
+      
+      snapshot.forEach(function(childSnapshot){
+
+        var currName = childSnapshot.val().Name;
+        var currId = childSnapshot.val().Curriculumid;
+        var minimumCredit= childSnapshot.val().Minimumcredit;
+
+        
+
+        $("#currName").append('<h5><button class="dropdown-item" id="btnCurrName'+i+'" onclick="getCurrInfo(\''+currNameId+'\',\''+currName+'\', \''+currId+'\',\''+minimumCredit+'\')" >'+currName+'</button><div class="dropdown-divider"></div></h5>');
+
+        
+        
+
+
+
+        console.log("getCurrName"+i);
+        
+      });
+
+
+
+    });
+
+
+
+
+
+
+  });
+
+
+
+
+}
+
+
+
+
+function getCurrInfo(currNameId, currName, currId, minimumCredit){
+
+  console.log("getCurrInfo"+currNameId+currName+currId+minimumCredit);
+
+
+  $(document).ready(function(){
+
+    $("#headCurrName").empty();
+    $("#headCurrName").append(''+currName+'');
+
+
+    $("#Info").empty();
+    $("#Info").append('<tr><td>'+currNameId+'</td><td>'+currId+'</td><td>'+minimumCredit+'</td></tr>');
+
+    currNameIdGlobal = currNameId;
+    start(currNameId); 
+
+
+  });
+
+
+
+
+
+
+
+}
 /*
 window.onload=function(){
 
